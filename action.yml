@@ -36,9 +36,15 @@ runs:
     
     - name: '.dmb parse error check'
       id: dmb-parse-error-check
-      if: "(failure() && steps.fetch-required-client-version.outcome == 'failure') || (success() && (steps.fetch-required-client-version.outputs.required-client-version == null || steps.fetch-required-client-version.outputs.required-client-version == ''))"
+      if: "(steps.fetch-required-client-version.outputs.required-client-version == '' || steps.fetch-required-client-version.outputs.required-client-version == null)"
       shell: bash
-      run: 'echo "::error file=${{ inputs.dmb-location }},line=1,endline=2::Error parsing dmb for required client version";exit 1'
+      run: 'echo "Empty value";exit 1'
+      
+    - name: '.dmb parse error message'
+      id: dmb-parse-error-message
+      if: "failure() && (steps.fetch-required-client-version.outcome == 'failure' || steps.dmb-parse-error-check.outcome == 'failure')"
+      shell: bash
+      run: 'echo "::error file=${{ inputs.dmb-location }},line=1,endline=2::Error parsing dmb for required client version"'
       
     - name: 'Check required client version is not higher then allowed max.'
       id: check-required-client-version
