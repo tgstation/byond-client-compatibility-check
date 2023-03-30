@@ -57,4 +57,4 @@ runs:
       id: check-required-client-version-error
       if: "failure() && steps.check-required-client-version.outcome == 'failure'"
       shell: bash
-      run: 'echo "::error file=${{ inputs.dmb-location }},line=2,endline=2::byond world ${{ inputs.dmb-location }} requires version ${{ steps.fetch-required-client-version.outputs.required-client-version }} which is higher than the allowed max required version of ${{ inputs.max-required-client-version }}."'
+      run: 'echo "::error file=${{ inputs.dmb-location }},line=2,endline=2::Byond world ${{ inputs.dmb-location }} requires client version ${{ steps.fetch-required-client-version.outputs.required-client-version }} which is higher than the allowed max required client version of ${{ inputs.max-required-client-version }}."'
