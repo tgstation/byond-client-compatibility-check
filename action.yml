@@ -1,0 +1,34 @@
+name: 'Byond Client Compatibility Check'
+description: "Github action to confirm that the required client version of byond world (.dmb) isn't higher than expected. "
+inputs:
+  dmb-location: 
+    description: 'File location of the compiled byond world dmb to check.'
+    required: true
+  max-required-client-version: 
+    description: 'Highest allowed dreamseeker major version that can be required by the compiled byond world. Leave empty if you just want the output'
+    required: false
+    default: 9999
+ output:
+  required-ds-major-version:
+    description: 'The detected client compatibility version'
+    value: ${{ steps.fetch-required-client-version.outputs.required-client-version }}
+runs:
+  using: "composite"
+  steps:
+    - name: 'Validate inputs.max-required-ds-major-version'
+      id: validate-max-required-ds-major-version
+      run: '(( ${{ inputs.max-required-ds-major-version }} ))'
+      shell: bash
+      if: 'inputs.max-required-ds-major-version != 9999'
+    
+    - name: 'Extract client compatibility version from dmb'
+      id: fetch-required-client-version
+      run: 'echo "required-client-version=$( $(( head -n2 ${{ inputs.dmb-location }} | tail -n1 | cut -d " " -f 4 )) )" >> $GITHUB_OUTPUT'
+      shell: bash
+    
+    - name: 'Check required client version is not higher then allowed max.'
+      id: check-required-client-version
+      run: (( $(( ${{ steps.fetch-required-client-version.outputs.required-client-version }} )) <= $(( ${{ inputs.max-required-ds-major-version }} )) ))
+      shell: bash
+      if: 'inputs.max-required-ds-major-version != 9999'
+      
