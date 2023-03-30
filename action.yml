@@ -25,7 +25,7 @@ runs:
     
     - name: 'Input validation error message'
       id: validate-max-required-client-version-error-message
-      if: "failure() && steps.validate-max-required-client-version.conclusion == 'failure'"
+      if: "failure() && steps.validate-max-required-client-version.outcome == 'failure'"
       shell: bash
       run: 'echo "::error ::Invalid max-required-client-version'
     
@@ -36,7 +36,7 @@ runs:
     
     - name: '.dmb parse error check'
       id: dmb-parse-error-check
-      if: "(failure() && steps.fetch-required-client-version.conclusion == 'failure') || (success && (steps.fetch-required-client-version.outputs.required-client-version == null || steps.fetch-required-client-version.outputs.required-client-version == ''))"
+      if: "(failure() && steps.fetch-required-client-version.outcome == 'failure') || (success() && (steps.fetch-required-client-version.outputs.required-client-version == null || steps.fetch-required-client-version.outputs.required-client-version == ''))"
       shell: bash
       run: 'echo "::error file=${{ inputs.dmb-location }},line=1,endline=2::Error parsing dmb for required client version";exit 1'
       
@@ -49,6 +49,6 @@ runs:
     
     - name: 'Version validation error message'
       id: check-required-client-version-error
-      if: "failure() && steps.validate-max-required-client-version.conclusion == 'failure'"
+      if: "failure() && steps.validate-max-required-client-version.outcome == 'failure'"
       shell: bash
       run: 'echo "::error file=${{ inputs.dmb-location }},line=2,endline=2::byond world ${{ inputs.dmb-location }} requires version ${{ steps.fetch-required-client-version.outputs.required-client-version }} which is higher than the allowed max required version of ${{ inputs.max-required-client-version }}.";exit 1'
