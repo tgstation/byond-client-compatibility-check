@@ -27,7 +27,7 @@ runs:
       id: validate-max-required-client-version-error-message
       if: "failure() && steps.validate-max-required-client-version.outcome == 'failure'"
       shell: bash
-      run: "echo '::error ::Invalid max-required-client-version passed to Byond Client Compatibility Check: `${{ toJSON(inputs.max-required-client-version) }}`';exit 1"
+      run: "echo '::error ::Invalid max-required-client-version passed to Byond Client Compatibility Check: `${{ toJSON(inputs.max-required-client-version) }}`'"
     
     - name: 'Extract client compatibility version from dmb'
       id: fetch-required-client-version
@@ -38,7 +38,7 @@ runs:
       id: dmb-parse-error-check
       if: "(failure() && steps.fetch-required-client-version.outcome == 'failure') || (success() && (steps.fetch-required-client-version.outputs.required-client-version == null || steps.fetch-required-client-version.outputs.required-client-version == ''))"
       shell: bash
-      run: 'echo "::error file=${{ inputs.dmb-location }},line=1,endline=2::Error parsing dmb for required client version";exit 1'
+      run: 'echo "::error file=${{ inputs.dmb-location }},line=1,endline=2::Error parsing dmb for required client version"'
       
     - name: 'Check required client version is not higher then allowed max.'
       id: check-required-client-version
@@ -51,4 +51,4 @@ runs:
       id: check-required-client-version-error
       if: "failure() && steps.check-required-client-version.outcome == 'failure'"
       shell: bash
-      run: 'echo "::error file=${{ inputs.dmb-location }},line=2,endline=2::byond world ${{ inputs.dmb-location }} requires version ${{ steps.fetch-required-client-version.outputs.required-client-version }} which is higher than the allowed max required version of ${{ inputs.max-required-client-version }}.";exit 1'
+      run: 'echo "::error file=${{ inputs.dmb-location }},line=2,endline=2::byond world ${{ inputs.dmb-location }} requires version ${{ steps.fetch-required-client-version.outputs.required-client-version }} which is higher than the allowed max required version of ${{ inputs.max-required-client-version }}."'
