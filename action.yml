@@ -8,10 +8,11 @@ inputs:
     description: 'Highest allowed dreamseeker major version that can be required by the compiled byond world. Leave empty if you just want the output'
     required: false
     default: 9999
- output:
+output:
   required-ds-major-version:
     description: 'The detected client compatibility version'
     value: ${{ steps.fetch-required-client-version.outputs.required-client-version }}
+
 runs:
   using: "composite"
   steps:
