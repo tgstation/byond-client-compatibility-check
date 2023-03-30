@@ -27,7 +27,7 @@ runs:
       id: validate-max-required-client-version-error-message
       if: "failure() && steps.validate-max-required-client-version.outcome == 'failure'"
       shell: bash
-      run: "echo '::error ::Invalid max-required-client-version passed to Byond Client Compatibility Check: `${{ toJSON(input.max-required-client-version) }}`';exit 1"
+      run: "echo '::error ::Invalid max-required-client-version passed to Byond Client Compatibility Check: `${{ toJSON(inputs.max-required-client-version) }}`';exit 1"
     
     - name: 'Extract client compatibility version from dmb'
       id: fetch-required-client-version
