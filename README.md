@@ -22,7 +22,7 @@ jobs:
       [...]
       - name: compile dmb
       [...]
-      - uses: MrStonedOne/byond-client-compatibility-check@v2
+      - uses: MrStonedOne/byond-client-compatibility-check@v3
         with:
           dmb-location: tgstation.dmb
           max-required-client-version: 514
